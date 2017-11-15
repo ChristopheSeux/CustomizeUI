@@ -26,7 +26,9 @@ def hide_panels():
 
         #bpy.utils.register_class(pt)
         if customize_UI_prefs.panels.get(pt_id) ==0:
-            bpy.utils.unregister_class(pt)
+            if "bl_rna" in pt.__dict__:
+                bpy.utils.unregister_class(pt)
+
 
 def show_panels():
     customize_UI_prefs = bpy.context.user_preferences.addons[addon].preferences

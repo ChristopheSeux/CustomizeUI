@@ -13,32 +13,32 @@ if "bpy" in locals():
     importlib.reload(properties)
     importlib.reload(functions)
 
-else:
-    from .operators import *
-    from .panels import *
-    from .properties import *
-    from .functions import *
+else :
+    from . import operators
+    from . import panels
+    from . import properties
+    from . import functions
 
-import time
+import time,bpy
 from bpy.app.handlers import persistent
 
 @persistent
 def apply_UI_handler(dummy):
-    hide_panels()
+    functions.hide_panels()
 
 
 def register() :
     bpy.utils.register_module(__name__)
-    bpy.types.INFO_HT_header.append(menu_func)
+    bpy.types.INFO_HT_header.append(panels.menu_func)
     bpy.app.handlers.load_post.append(apply_UI_handler)
 
     try :
-        hide_panels()
+        functions.hide_panels()
     except :
         pass
 
 def unregister() :
-    show_panels()
+    functions.show_panels()
     bpy.utils.unregister_module(__name__)
-    bpy.types.INFO_HT_header.remove(menu_func)
+    bpy.types.INFO_HT_header.remove(panels.menu_func)
     bpy.app.handlers.load_post.remove(apply_UI_handler)

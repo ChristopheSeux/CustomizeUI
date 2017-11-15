@@ -18,8 +18,8 @@ class CustomizeUI(bpy.types.Operator) :
             pt_id = get_panel_id(pt)
 
             setattr(pt,'draw_header',eval("lambda s, c: (s.layout.prop(c.user_preferences.addons[addon].preferences.panels, '%s', text=''))"%pt_id))
-
-            bpy.utils.unregister_class(pt)
+            if "bl_rna" in pt.__dict__:
+                bpy.utils.unregister_class(pt)
             bpy.utils.register_class(pt)
 
         customize_UI_prefs.customize = not customize_UI_prefs.customize
@@ -53,13 +53,19 @@ class ApplyUI(bpy.types.Operator) :
             pt_id = get_panel_id(pt)
 
             if pt_id in CustomizeUI.panels_header :
+
                 setattr(pt,'draw_header',CustomizeUI.panels_header[pt_id])
+
             else :
-                delattr(pt,'draw_header')
-            bpy.utils.unregister_class(pt)
+                if hasattr(pt,'draw_header') :
+                    delattr(pt,'draw_header')
+
+            if "bl_rna" in pt.__dict__:
+                bpy.utils.unregister_class(pt)
             bpy.utils.register_class(pt)
 
             if not getattr(customize_UI_prefs.panels,pt_id) :
-                bpy.utils.unregister_class(pt)
+                if "bl_rna" in pt.__dict__:
+                    bpy.utils.unregister_class(pt)
         customize_UI_prefs.customize = not customize_UI_prefs.customize
         return {'FINISHED'}
