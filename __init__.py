@@ -29,6 +29,7 @@ def apply_UI_handler(dummy):
 
 def register() :
     bpy.utils.register_module(__name__)
+
     bpy.types.INFO_HT_header.append(panels.menu_func)
     bpy.app.handlers.load_post.append(apply_UI_handler)
 
